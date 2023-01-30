@@ -1,14 +1,16 @@
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 5000;
-
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const helmet = require("helmet");
-const morgan = require("morgan")
+const morgan = require("morgan");
+const userRoute = require("./Routes/users");
 
 dotenv.config();
 
+
+// connection into mongodb
 mongoose.set('strictQuery', true);
 mongoose.connect(process.env.MONGO_URL, 
     {useNewUrlParse: true, useUnifiedTopology: true}, 
@@ -21,6 +23,9 @@ mongoose.connect(process.env.MONGO_URL,
 app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"))
+
+
+app.use("/api/users", userRoute);
 
 
 app.get('/', (req, res) => {
